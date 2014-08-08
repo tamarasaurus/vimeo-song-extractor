@@ -1,8 +1,7 @@
 var ytdl = require('youtube-dl-vimeo');
-
 var request = require('superagent');
-
 var _ = require('underscore');
+var config = require('./config');
 
 
 
@@ -33,7 +32,7 @@ ytdl.getInfo('http://vimeo.com/45105236', function(err, data) {
 	request
 		.post('http://developer.echonest.com/api/v4/track/upload')
 		.send({
-			api_key: '',
+			api_key: config.api_key,
 			url: video.url,
 			filetype: 'mp4'
 		})
