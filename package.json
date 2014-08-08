@@ -25,6 +25,7 @@
   "dependencies": {
     "echojs": "^0.1.4",
     "superagent": "^0.18.2",
+    "underscore": "^1.6.0",
     "youtube-dl-vimeo": "^1.5.11"
   }
 }

@@ -1,11 +1,18 @@
 var ytdl = require('youtube-dl-vimeo');
 
-var echojs = require('echojs'),
-request = require('superagent');
+var request = require('superagent');
 
-var echo = echojs({
-	key: process.env.ECHONEST_KEY
-});
+var _ = require('underscore');
+
+
+
+var getTrackInfo = function(error, res) {
+	console.log(res.body.response);
+	if (res.body.response.status !== 0) {
+		return;
+	}
+	// !_.isUndefined(res.body.response) && !_.isEmpty(res.body.response.track.title)
+};
 
 
 ytdl.getInfo('http://vimeo.com/45105236', function(err, data) {
@@ -23,7 +30,6 @@ ytdl.getInfo('http://vimeo.com/45105236', function(err, data) {
 		resolution: format[1]
 	};
 
-
 	request
 		.post('http://developer.echonest.com/api/v4/track/upload')
 		.send({
@@ -33,10 +39,6 @@ ytdl.getInfo('http://vimeo.com/45105236', function(err, data) {
 		})
 		.type('form')
 		.end(function(error, res) {
-            if(res.body.response.status !== 0){
-                return ;
-            }
-            console.log(res.body.response.track);
+			getTrackInfo(error, res);
 		});
-
 });
