@@ -1,0 +1,30 @@
+{
+  "name": "vimeo-song-extractor",
+  "version": "0.0.1",
+  "description": "Extract songs from vimeo and get song details using echonest ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tamarasaurus/vimeo-song-extractor.git"
+  },
+  "keywords": [
+    "vimeo",
+    "echonest",
+    "music",
+    "audio"
+  ],
+  "author": "Tamara Chahine",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tamarasaurus/vimeo-song-extractor/issues"
+  },
+  "homepage": "https://github.com/tamarasaurus/vimeo-song-extractor",
+  "dependencies": {
+    "echojs": "^0.1.4",
+    "superagent": "^0.18.2",
+    "youtube-dl-vimeo": "^1.5.11"
+  }
+}
