@@ -1,54 +1,42 @@
 var ytdl = require('youtube-dl-vimeo');
-var url = 'http://vimeo.com/93491987';
-var echojs = require('echojs');
-var fs = require('fs'),
+
+var echojs = require('echojs'),
 request = require('superagent');
 
 var echo = echojs({
-  key: process.env.ECHONEST_KEY
+	key: process.env.ECHONEST_KEY
 });
 
 
+ytdl.getInfo('http://vimeo.com/45105236', function(err, data) {
+	if (err) throw err;
 
-ytdl.getInfo(url, function(err, data) {
-    if (err) throw err;
-
-    var format = data[data.length - 1].split(' - ');
-    var video = {
-      title       : data[0],
-      id          : data[1],
-      url         : data[2],
-      thumbnail   : data[3],
-      description : data.slice(4, data.length - 2).join('\n'),
-      filename    : data[data.length - 2],
-      format        : format[0],
-      resolution  : format[1]
-    };
-
-
-    console.log(video.url);
-    var posted = echo('track/upload').post({
-        filetype: 'mp3',
-        format:'json'
-      }, 'application/octet-stream', 'http://www.tonycuffe.com/mp3/girlwho.mp3', function (err, json) {
-        // console.log(err, json);
-      });
+	var format = data[data.length - 1].split(' - ');
+	var video = {
+		title: data[0],
+		id: data[1],
+		url: data[2],
+		thumbnail: data[3],
+		description: data.slice(4, data.length - 2).join('\n'),
+		filename: data[data.length - 2],
+		format: format[0],
+		resolution: format[1]
+	};
 
 
-    // request.get(video.url).end(function(e, res){
-    //     console.log(e, res.body)
-    // });
+	request
+		.post('http://developer.echonest.com/api/v4/track/upload')
+		.send({
+			api_key: '',
+			url: video.url,
+			filetype: 'mp4'
+		})
+		.type('form')
+		.end(function(error, res) {
+            if(res.body.response.status !== 0){
+                return ;
+            }
+            console.log(res.body.response.track);
+		});
 
-    // fs.readFile(video.url, function (err, buffer) {
-    //     console.log(err, buffer);
-
-    //   echo('track/upload').post({
-    //     filetype: 'mp4'
-    //   }, 'application/octet-stream', buffer, function (err, json) {
-    //     console.log(err, json);
-    //   });
-    // });
-
-}
-);
-
+});
