@@ -1,43 +1,64 @@
 var ytdl = require('youtube-dl-vimeo');
-var request = require('superagent');
-var _ = require('underscore');
-var config = require('./config');
+var request = require('superagent'),
+config = require('./config'),
+events = require('events');
 
-
-
-var getTrackInfo = function(error, res) {
-	console.log(res.body.response);
-	if (res.body.response.status !== 0) {
-		return;
-	}
-	// !_.isUndefined(res.body.response) && !_.isEmpty(res.body.response.track.title)
-};
-
-
-ytdl.getInfo('http://vimeo.com/45105236', function(err, data) {
-	if (err) throw err;
-
-	var format = data[data.length - 1].split(' - ');
-	var video = {
-		title: data[0],
-		id: data[1],
-		url: data[2],
-		thumbnail: data[3],
-		description: data.slice(4, data.length - 2).join('\n'),
-		filename: data[data.length - 2],
-		format: format[0],
-		resolution: format[1]
+module.exports = (function() {
+	var extractor = function() {
+		this.events = new events.EventEmitter();
 	};
 
-	request
-		.post('http://developer.echonest.com/api/v4/track/upload')
-		.send({
-			api_key: config.api_key,
-			url: video.url,
-			filetype: 'mp4'
-		})
-		.type('form')
-		.end(function(error, res) {
-			getTrackInfo(error, res);
-		});
-});
+	var errors = {
+		echonest: 'There was an error getting data from echonest',
+		stream: 'There was an error getting the video stream url ',
+		status: 'There was an error getting the track status'
+	};
+
+	// add to the queue after posttrack
+	extractor.prototype = {
+		postTrack: function(stream) {
+			var _this = this;
+			request
+				.post('http://developer.echonest.com/api/v4/track/upload')
+				.send({
+					api_key: config.api_key,
+					url: stream,
+					filetype: 'mp4'
+				})
+				.type('form')
+				.end(function(error, res) {
+					if (error) {
+						_this.events.emit('error', errors.echonest);
+					}
+					_this.events.emit('start', res.body.response);
+				});
+		},
+		getVideoStream: function(url, res) {
+            this.res = res;
+			var _this = this;
+			ytdl.getInfo(url, function(err, data) {
+				if (err) {
+					return _this.events.emit('error', errors.stream);
+				}
+				_this.postTrack(data[2]);
+			});
+		},
+		getTrackStatus: function(id) {
+			var _this = this;
+            request.get('http://developer.echonest.com/api/v4/track/profile')
+                .query({
+                    api_key: config.api_key,
+                    id: id,
+                    format: 'json',
+                    bucket: 'audio_summary'
+                }).end(function(err, res) {
+                    if (err) {
+                        return _this.events.emit('error', errors.status, err);
+                    }
+                    _this.events.emit('poll', res, _this.res);
+                });
+		}
+	};
+
+	return extractor;
+}());

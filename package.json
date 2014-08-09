@@ -4,7 +4,7 @@
   "description": "Extract songs from vimeo and get song details using echonest ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "example.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,7 @@
   "homepage": "https://github.com/tamarasaurus/vimeo-song-extractor",
   "dependencies": {
     "echojs": "^0.1.4",
+    "express": "^4.8.2",
     "superagent": "^0.18.2",
     "underscore": "^1.6.0",
     "youtube-dl-vimeo": "^1.5.11"
