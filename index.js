@@ -34,7 +34,8 @@ module.exports = (function() {
          * @desc Post a Vimeo stream mp4 to the echonest api
          * @param  {String} stream An mp4 from a Vimeo stream
          */
-		postTrack: function(stream) {
+		postTrack: function(stream, cb) {
+            console.log('getVideoStream', stream);
 			var _this = this;
 			request
 				.post('http://developer.echonest.com/api/v4/track/upload')
@@ -48,7 +49,7 @@ module.exports = (function() {
 					if (error) {
 						_this.events.emit('error', errors.echonest);
 					}
-					_this.events.emit('start', res.body.response);
+                    cb.call(null, res.body.response);
 				});
 		},
         /**
@@ -57,14 +58,14 @@ module.exports = (function() {
          * @param  {String} url The full vimeo URL
          * @param  {Object} res The response object to pass
          */
-		getVideoStream: function(url, res) {
-            this.res = res;
+		getVideoStream: function(url, cb) {
+            console.log('getVideoStream: ', url);
 			var _this = this;
 			ytdl.getInfo(url, function(err, data) {
 				if (err) {
 					return _this.events.emit('error', errors.stream);
 				}
-				_this.postTrack(data[2]);
+				_this.postTrack(data[2], cb);
 			});
 		},
         /**
@@ -72,7 +73,8 @@ module.exports = (function() {
          * @desc Get the status of a track that's currently being analysed by echonest
          * @param  {String} id The track id from echonest
          */
-		getTrackStatus: function(id) {
+		getTrackStatus: function(id, cb) {
+            console.log('getTrackStatus: ', id);
 			var _this = this;
             request.get('http://developer.echonest.com/api/v4/track/profile')
                 .query({
@@ -84,7 +86,7 @@ module.exports = (function() {
                     if (err) {
                         return _this.events.emit('error', errors.status, err);
                     }
-                    _this.events.emit('poll', res, _this.res);
+                    cb.call(null, res);
                 });
 		}
 	};
