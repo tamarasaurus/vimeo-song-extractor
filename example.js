@@ -7,7 +7,6 @@ var Extractor = require('./index'),
 
 app.get('/get', function(req, res) {
 	extractor.getVideoStream(req.query.video, function(data){
-		console.log(data);
 		if(_.isUndefined(data.track)){
 			res.json(data);
 		}else{
