@@ -45,3 +45,8 @@ Error messages
 ### getTrackStatus
 
 * **String** - *id* - The track id from echonest
+
+roadmap
+===================
+* add polling feature to check if track analysis has finished
+* add better error handling
