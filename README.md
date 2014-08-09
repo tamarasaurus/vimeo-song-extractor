@@ -33,19 +33,13 @@ Error messages
 
 ### postTrack
 
-#### Params:
-
-* **String** *stream* An mp4 from a Vimeo stream
+* **String** - *stream* - An mp4 from a Vimeo stream
 
 ### getVideoStream
 
-#### Params:
-
-* **String** *url* The full vimeo URL
-* **Object** *res* The response object to pass
+* **String** -  *url* - The full vimeo URL
+* **Object** -  *res* - The response object to pass
 
 ### getTrackStatus
 
-#### Params:
-
-* **String** *id* The track id from echonest
+* **String** - *id* - The track id from echonest
