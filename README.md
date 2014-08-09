@@ -31,21 +31,21 @@ Constructor
 
 Error messages
 
-postTrack
+### postTrack
 
-### Params:
+#### Params:
 
 * **String** *stream* An mp4 from a Vimeo stream
 
-getVideoStream
+### getVideoStream
 
-### Params:
+#### Params:
 
 * **String** *url* The full vimeo URL
 * **Object** *res* The response object to pass
 
-getTrackStatus
+### getTrackStatus
 
-### Params:
+#### Params:
 
 * **String** *id* The track id from echonest
