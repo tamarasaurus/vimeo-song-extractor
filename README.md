@@ -7,7 +7,9 @@ Extract songs from vimeo and get song details using echonest
 instructions
 ===================
 
-1. Make a config.js file in the root folder that looks like this:
+1. Register for an echonest developer account https://developer.echonest.com/account/register and generate an API key
+
+2. Make a config.js file in the root folder that looks like this:
 
 ```javascript
 module.exports = {
@@ -15,9 +17,9 @@ module.exports = {
 };
 ```
 
-2. Run ```node example``` to run an example application
+3. Run ```node example``` to run an example application
 
-3. Go to ```http://localhost:3000/get?video=[full vimeo url]```
+4. Go to ```http://localhost:3000/get?video=[full vimeo url]``` to get track information
 
 
 docs
